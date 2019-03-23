@@ -1,0 +1,18 @@
+body {
+    text-align: center;
+    font-family: Arial sans-serif;
+}
+
+.msg {
+    margin: 0 auto 15px;
+    width: 400px;
+    font-weight: bold;
+}
+
+.msg.success {
+    color: chartreuse;
+}
+
+.msg.error {
+    color: red;
+}
