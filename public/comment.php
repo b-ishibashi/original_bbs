@@ -2,22 +2,22 @@
 
 namespace MyApp;
 
-class Comment {
-
-    public function __construct() {
-
+class Comment
+{
+    public function __construct()
+    {
         $this->create_token();
     }
 
-    private function create_token() {
-
+    private function create_token()
+    {
         if (!isset($_SESSION['token'])) {
             $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(16));
         }
     }
 
-    private function validate_token() {
-
+    private function validate_token()
+    {
         if (
             !isset($_SESSION['token']) ||
             !isset($_POST['token']) ||
@@ -27,20 +27,21 @@ class Comment {
         }
     }
 
-    private function memoize_inputs() {
+    private function memoize_inputs()
+    {
         $_SESSION['name'] = $_POST['name'] ?? null;
         $_SESSION['comment'] = $_POST['comment'] ?? null;
     }
 
-    private function clear_inputs() {
+    private function clear_inputs()
+    {
         $_SESSION['name'] = null;
         $_SESSION['comment'] = null;
     }
 
-    public function post_comment() {
-
+    public function post_comment()
+    {
         try {
-
             $this->memoize_inputs();
 
             //投稿不備検証
@@ -55,7 +56,6 @@ class Comment {
             $_SESSION['success'] = 'Upload done!';
 
             $this->clear_inputs();
-
         } catch (\Exception $e) {
             $_SESSION['error'] = $e->getMessage();
         }
@@ -65,33 +65,33 @@ class Comment {
         //exit;
     }
 
-    public function get_results() {
-
+    public function get_results()
+    {
         $success = null;
         $error = null;
 
-        if(isset($_SESSION['success'])) {
+        if (isset($_SESSION['success'])) {
             $success = $_SESSION['success'];
             unset($_SESSION['success']);
         }
-        if(isset($_SESSION['error'])) {
+        if (isset($_SESSION['error'])) {
             $error = $_SESSION['error'];
             unset($_SESSION['error']);
         }
 
         return [$success, $error];
-
     }
 
-    public function get_name_comment() {
+    public function get_name_comment()
+    {
         return [
             $_SESSION['name'] ?? null,
             $_SESSION['comment'] ?? null,
         ];
     }
 
-    private function validate_ispost() {
-
+    private function validate_ispost()
+    {
         if ((!isset($_SESSION['name']) || $_SESSION['name'] === '') && (!isset($_SESSION['comment']) || $_SESSION['comment'] === '')) {
             throw new \Exception('何も入力されていません。');
         }
@@ -105,8 +105,8 @@ class Comment {
         }
     }
 
-    private function validate_post_type() {
-
+    private function validate_post_type()
+    {
         if (mb_strlen($_SESSION['name']) > 10) {
             throw new \Exception('名前は10文字以下にしてください。');
         }
@@ -116,7 +116,8 @@ class Comment {
         }
     }
 
-    private function upload_comments() {
+    private function upload_comments()
+    {
 
         //データベースに接続
         $pdo = new \PDO(
@@ -131,16 +132,8 @@ class Comment {
         $name = $_SESSION['name'];
         $comment = $_SESSION['comment'];
         $stmt =  $pdo->prepare("insert into users (name, comment) values (:name, :comment)");
-        $stmt->bindParam(':name', $name, \PDO::PARAM_STR);
-        $stmt->bindParam(':comment', $comment, \PDO::PARAM_STR);
+        $stmt->bindValue(':name', $name, \PDO::PARAM_STR);
+        $stmt->bindValue(':comment', $comment, \PDO::PARAM_STR);
         $stmt->execute();
     }
-
 }
-
-
-
-
-
-
-

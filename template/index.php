@@ -15,11 +15,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Location: http://' . $_SERVER['HTTP_HOST']);
     exit;
 }
+[$name, $comment] = $comments->get_name_comment();
 
-list($name, $comment) = $comments->get_name_comment();
 
-
-list($success, $error) = $comments->get_results();
+[$success, $error] = $comments->get_results();
 //var_dump($success);
 //var_dump($error);
 
@@ -36,7 +35,7 @@ list($success, $error) = $comments->get_results();
     <h1>BBS</h1>
     <?php if (isset($success)): ?>
         <div class="msg success"><?=h($success)?></div>
-    <?php elseif(isset($error)): ?>
+    <?php elseif (isset($error)): ?>
         <div class="msg error"><?=h($error)?></div>
     <?php else: ?>
         <div class="msg default">入力してください。</div>
