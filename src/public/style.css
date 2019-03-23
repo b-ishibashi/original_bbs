@@ -1,0 +1,93 @@
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-family: Arial sans-serif;
+    background-image: url("image.jpg");
+    background-size: cover;
+    opacity: 0.5;
+}
+
+article {
+    display: inline-block;
+}
+
+h1 {
+    font-family: 'Vollkorn', serif;
+}
+
+input[type=text] {
+    padding: 5px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+span {
+    font-family: 'Noto Serif JP', sans-serif;
+    font-weight: bold;
+}
+
+.post_list {
+    border-top: solid 2px #666666;
+    margin-top: 30px;
+    background: #CCCCCC;
+    width: 100%;
+}
+
+.bs-mask {
+    height: 100%;
+    background: rgba(255,255,255,0.5);
+}
+
+.post_form {
+
+}
+
+.post {
+    display: flex;
+}
+
+.msg {
+    margin: 0 auto 15px;
+    width: 400px;
+    font-weight: bold;
+}
+
+.msg.success {
+    color: chartreuse;
+}
+
+.msg.error {
+    color: red;
+}
+
+#now {
+    padding: 0 30px 30px 0;
+}
+
+#name {
+    padding: 0 30px 30px 0;
+}
+
+#btn {
+    display: inline-block;
+    padding: 0.5em 1em;
+    text-decoration: none;
+    background: #668ad8;
+    color: #FFF;
+    border-bottom: solid 4px #627295;
+    border-radius: 3px;
+}
+
+#btn:active {
+    -webkit-transform: translateY(4px);
+    transform: translateY(4px);/*下に動く*/
+    border-bottom: none;/*線を消す*/
+}
+
+
+
+
+
