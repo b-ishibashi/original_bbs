@@ -27,9 +27,21 @@ class Comment {
         }
     }
 
+    private function memoize_inputs() {
+        $_SESSION['name'] = $_POST['name'] ?? null;
+        $_SESSION['comment'] = $_POST['comment'] ?? null;
+    }
+
+    private function clear_inputs() {
+        $_SESSION['name'] = null;
+        $_SESSION['comment'] = null;
+    }
+
     public function post_comment() {
 
         try {
+
+            $this->memoize_inputs();
 
             //投稿不備検証
             $this->validate_ispost();
@@ -41,6 +53,9 @@ class Comment {
             $this->upload_comments();
 
             $_SESSION['success'] = 'Upload done!';
+
+            $this->clear_inputs();
+
         } catch (\Exception $e) {
             $_SESSION['error'] = $e->getMessage();
         }
@@ -69,45 +84,34 @@ class Comment {
     }
 
     public function get_name_comment() {
-
-        $name = null;
-        $comment = null;
-
-        //入力情報検証
-        if (array_key_exists('name', $_POST)) {
-            $_SESSION['name'] = $_POST['name'];
-            $name = $_SESSION['name'];
-        }
-        if (array_key_exists('comment', $_POST)) {
-            $_SESSION['comment'] = $_POST['comment'];
-            $comment = $_SESSION['comment'];
-        }
-
-        return [$name, $comment];
+        return [
+            $_SESSION['name'] ?? null,
+            $_SESSION['comment'] ?? null,
+        ];
     }
 
     private function validate_ispost() {
 
-        if ((!isset($_POST['name']) || $_POST['name'] === '') && (!isset($_POST['comment']) || $_POST['comment'] === '')) {
+        if ((!isset($_SESSION['name']) || $_SESSION['name'] === '') && (!isset($_SESSION['comment']) || $_SESSION['comment'] === '')) {
             throw new \Exception('何も入力されていません。');
         }
 
-        if (!isset($_POST['name']) || $_POST['name'] === '') {
+        if (!isset($_SESSION['name']) || $_SESSION['name'] === '') {
             throw new \Exception('名前が入力されていません。');
         }
 
-        if (!isset($_POST['comment']) || $_POST['comment'] === '') {
+        if (!isset($_SESSION['comment']) || $_SESSION['comment'] === '') {
             throw new \Exception('本文が入力されていません。');
         }
     }
 
     private function validate_post_type() {
 
-        if (mb_strlen($_POST['name']) > 10) {
+        if (mb_strlen($_SESSION['name']) > 10) {
             throw new \Exception('名前は10文字以下にしてください。');
         }
 
-        if (mb_strlen($_POST['comment']) > 100) {
+        if (mb_strlen($_SESSION['comment']) > 100) {
             throw new \Exception('投稿は100文字以下にしてください。');
         }
     }
@@ -124,8 +128,8 @@ class Comment {
             ]
         );
 
-        $name = $_POST['name'];
-        $comment = $_POST['comment'];
+        $name = $_SESSION['name'];
+        $comment = $_SESSION['comment'];
         $stmt =  $pdo->prepare("insert into users (name, comment) values (:name, :comment)");
         $stmt->bindParam(':name', $name, \PDO::PARAM_STR);
         $stmt->bindParam(':comment', $comment, \PDO::PARAM_STR);
