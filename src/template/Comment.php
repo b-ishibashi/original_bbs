@@ -137,7 +137,8 @@ class Comment
         $stmt->execute();
     }
 
-    public function get_posts() {
+    public function get_posts()
+    {
 
         //データベースから取得
         $pdo = new \PDO(
