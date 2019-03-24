@@ -2,8 +2,8 @@
 
 session_start();
 
-require_once __DIR__ . '../app/Models/Comment.php';
-require_once __DIR__ . '../app/functions.php';
+require_once __DIR__ . '/../app/Models/Comment.php';
+require_once __DIR__ . '/../app/functions.php';
 
 $posts = new App\Models\Comment;
 
