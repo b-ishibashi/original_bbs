@@ -7,17 +7,20 @@ require_once __DIR__ . '/../app/functions.php';
 
 $posts = new App\Models\Comment;
 
+$controller = new \App\HTTP\Controllers\CommentController($_SESSION);
 
 //投稿された
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $posts->create_post();
-
-    header('Location: /');
-    exit;
+    $controller->store($_REQUEST);
+} else {
+    $controller->index($_REQUEST);
 }
-[$name, $comment] = $posts->get_name_comment();
+
+//header('Location: /');
+//exit;
+//[$name, $comment] = $posts->get_name_comment();
 
 
-[$success, $error] = $posts->get_results();
+//[$success, $error] = $posts->get_results();
 
 include __DIR__ . '/../resources/views/index.php';
