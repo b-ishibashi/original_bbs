@@ -26,7 +26,7 @@
         <div class="post_list">
             <h1>投稿内容</h1>
             <article class="article">
-               <?php foreach ($posts->get_posts() as $post): ?>
+               <?php foreach ($posts as $post): ?>
                     <div class="post">
                         <div id="now"><span>投稿日時:</span> <?= h($post['created']) ?></div>
                         <div id="name"><span>名前:</span> <?= h($post['name']) ?></div>

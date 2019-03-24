@@ -1,23 +1,18 @@
 <?php
 
-session_start();
+use App\Http\Controllers\PostController;
+use App\Http\Session\Session;
 
-require_once __DIR__ . '/../app/Models/Comment.php';
+require_once __DIR__ . '/../app/Models/Post.php';
 require_once __DIR__ . '/../app/functions.php';
+require_once __DIR__ . '/../app/Http/Session.php';
+require_once __DIR__ . '/../app/Http/Controller/PostController.php';
 
-$posts = new App\Models\Comment;
-
+$controller = new PostController(new Session());
 
 //投稿された
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $posts->create_post();
-
-    header('Location: /');
-    exit;
+    $controller->store($_REQUEST);
+} else {
+    $controller->index($_REQUEST);
 }
-[$name, $comment] = $posts->get_name_comment();
-
-
-[$success, $error] = $posts->get_results();
-
-include __DIR__ . '/../resources/views/index.php';
