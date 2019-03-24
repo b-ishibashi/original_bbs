@@ -75,7 +75,16 @@ class PostController
 
     private function validate_token($request)
     {
-        if ($this->session->get('token') !== $request['token'] ?? null) {
+        // 期待する値
+        $expected = $this->session->get('token');
+        // 実際に送られてきた値
+        $actual = $request['token'] ?? null;
+
+        // 以下のいずれかの場合にエラーとする
+        // ・期待する値が null である（トークンは普通設定されているのでバグではない限りあり得ない）
+        // ・送られてきた値が null もしくは未定義である
+        // ・期待する値と送られてきた値が一致しない
+        if ($expected === null || $actual === null || $expected !== $actual) {
             throw new \Exception('validate token!');
         }
     }
