@@ -3,7 +3,11 @@
         "friendsofphp/php-cs-fixer": "^2.14"
     },
     "scripts": {
-        "fix": "vendor/bin/php-cs-fixer fix src",
-        "serve": "php -S localhost:8080 -t src/public"
+        "fix": [
+            "vendor/bin/php-cs-fixer fix app",
+            "vendor/bin/php-cs-fixer fix public",
+            "vendor/bin/php-cs-fixer fix resources/views"
+        ],
+        "serve": "php -S localhost:8080 -t public"
     }
 }
