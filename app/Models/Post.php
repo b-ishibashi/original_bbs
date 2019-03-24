@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-class Comment
+class Post
 {
-    private function insert_post()
+    public function insert_post()
     {
 
         //データベースに接続

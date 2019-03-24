@@ -1,8 +1,9 @@
 <?php
 
-namespace App\HTTP\Controllers;
+namespace App\Http\Controllers;
+use App\Models\Post;
 
-class CommentController
+class PostController
 {
     /**
      * @var array
@@ -27,7 +28,9 @@ class CommentController
      */
     public function index(array $request)
     {
-
+        [$name, $comment] = $this->get_name_comment();
+        [$success, $error] = $this->get_results();
+        include __DIR__ . '/../../../public/index.php';
     }
 
     /**
@@ -41,24 +44,24 @@ class CommentController
             $this->memoize_inputs($request);
 
             //投稿不備検証
-            $this->validate_name();
+            $this->validate_name($request);
 
-            $this->validate_comment();
+            $this->validate_comment($request);
 
             $this->validate_token($request);
 
-            $this->insert_post();
+            (new Post())->insert_post();
 
             $this->session['success'] = 'Upload done!';
 
             $this->clear_inputs();
         } catch (\Exception $e) {
-            $_SESSION['error'] = $e->getMessage();
+            $this->session['error'] = $e->getMessage();
         }
 
         //redirect
-        //header('Location: http://' . $_SERVER['HTTP_HOST']);
-        //exit;
+        header('Location: /');
+        exit;
     }
 
     private function create_token()
@@ -96,13 +99,13 @@ class CommentController
         $success = null;
         $error = null;
 
-        if (isset($_SESSION['success'])) {
-            $success = $_SESSION['success'];
-            unset($_SESSION['success']);
+        if (isset($this->session['success'])) {
+            $success = $this->session['success'];
+            unset($this->session['success']);
         }
-        if (isset($_SESSION['error'])) {
-            $error = $_SESSION['error'];
-            unset($_SESSION['error']);
+        if (isset($this->session['error'])) {
+            $error = $this->session['error'];
+            unset($this->session['error']);
         }
 
         return [$success, $error];
@@ -111,33 +114,33 @@ class CommentController
     public function get_name_comment()
     {
         return [
-            $_SESSION['name'] ?? null,
-            $_SESSION['comment'] ?? null,
+            $this->session['name'] ?? null,
+            $this->session['comment'] ?? null,
         ];
     }
 
-    private function validate_name()
+    private function validate_name($request)
     {
-        if ((!isset($this->session['name']) || $this->session['name'] === '') && (!isset($this->session['comment']) || $this->session['comment'] === '')) {
+        if ((!isset($request['name']) || $request['name'] === '') && (!isset($request['comment']) || $request['comment'] === '')) {
             throw new \Exception('何も入力されていません。');
         }
 
-        if (!isset($this->session['name']) || $this->session['name'] === '') {
+        if (!isset($request['name']) || $request['name'] === '') {
             throw new \Exception('名前が入力されていません。');
         }
 
-        if (mb_strlen($this->session['name']) > 10) {
+        if (mb_strlen($request['name']) > 10) {
             throw new \Exception('名前は10文字以下にしてください。');
         }
     }
 
-    private function validate_comment()
+    private function validate_comment($request)
     {
-        if (!isset($this->session['comment']) || $this->session['comment'] === '') {
+        if (!isset($request['comment']) || $request['comment'] === '') {
             throw new \Exception('本文が入力されていません。');
         }
 
-        if (mb_strlen($this->session['comment']) > 20) {
+        if (mb_strlen($request['comment']) > 20) {
             throw new \Exception('投稿は20文字以下にしてください。');
         }
     }
