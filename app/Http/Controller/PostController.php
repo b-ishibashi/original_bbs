@@ -1,21 +1,22 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Session\Session;
 use App\Models\Post;
 
 class PostController
 {
     /**
-     * @var array
+     * @var Session
      */
     protected $session;
 
     /**
      * インスタンス作成
      *
-     * @param array $session $_SESSION を渡す（参照渡し）
+     * @param Session $session
      */
-    public function __construct(array &$session)
+    public function __construct(Session $session)
     {
         $this->session = $session;
         $this->create_token();
@@ -53,11 +54,11 @@ class PostController
 
             (new Post())->insert_post();
 
-            $this->session['success'] = 'Upload done!';
+            $this->session->set('success', 'Upload done!');
 
             $this->clear_inputs();
         } catch (\Exception $e) {
-            $this->session['error'] = $e->getMessage();
+            $this->session->set('error', $e->getMessage());
         }
 
         //redirect
@@ -67,56 +68,43 @@ class PostController
 
     private function create_token()
     {
-        if (!isset($this->session)) {
-            $this->session['token'] = bin2hex(openssl_random_pseudo_bytes(16));
+        if ($this->session->get('token') === null) {
+            $this->session->set('token', bin2hex(openssl_random_pseudo_bytes(16)));
         }
     }
 
     private function validate_token($request)
     {
-        if (
-            !isset($this->session['token']) ||
-            !isset($request['token']) ||
-            $this->session['token'] !== $request['token']
-        ) {
+        if ($this->session->get('token') !== $request['token'] ?? null) {
             throw new \Exception('validate token!');
         }
     }
 
     private function memoize_inputs($request)
     {
-        $this->session['name'] = $request['name'] ?? null;
-        $this->session['comment'] = $request['comment'] ?? null;
+        $this->session->set('name', $request['name'] ?? null);
+        $this->session->set('comment', $request['comment'] ?? null);
     }
 
     private function clear_inputs()
     {
-        $this->session['name'] = null;
-        $this->session['comment'] = null;
+        $this->session->unset('name');
+        $this->session->unset('comment');
     }
 
     public function get_results()
     {
-        $success = null;
-        $error = null;
-
-        if (isset($this->session['success'])) {
-            $success = $this->session['success'];
-            unset($this->session['success']);
-        }
-        if (isset($this->session['error'])) {
-            $error = $this->session['error'];
-            unset($this->session['error']);
-        }
-
-        return [$success, $error];
+        return [
+            $this->session->flash('success'),
+            $this->session->flash('error'),
+        ];
     }
 
     public function get_name_comment()
     {
         return [
-            $this->session['name'] ?? null,
-            $this->session['comment'] ?? null,
+            $this->session->get('name'),
+            $this->session->get('comment'),
         ];
     }
 
