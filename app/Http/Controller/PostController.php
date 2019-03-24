@@ -30,7 +30,8 @@ class PostController
     {
         [$name, $comment] = $this->get_name_comment();
         [$success, $error] = $this->get_results();
-        include __DIR__ . '/../../../public/index.php';
+        $posts = $this->get_posts();
+        include __DIR__ . '/../../../resources/views/index.php';
     }
 
     /**
