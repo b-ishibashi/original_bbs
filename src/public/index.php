@@ -2,10 +2,10 @@
 
 session_start();
 
-require_once __DIR__ . '/../template/Comment.php';
+require_once __DIR__ . '/../Models/Comment.php';
 require_once __DIR__ . '/../functions.php';
 
-$posts = new MyApp\Comment;
+$posts = new App\Models\Comment;
 
 
 //投稿された
