@@ -1,32 +1,3 @@
-<?php
-
-session_start();
-
-require_once __DIR__ . '/../template/Comment.php';
-require_once __DIR__ . '/../functions.php';
-
-$posts = new MyApp\Comment;
-
-
-//投稿された
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $posts->create_post();
-
-    header('Location: /');
-    exit;
-}
-[$name, $comment] = $posts->get_name_comment();
-
-
-[$success, $error] = $posts->get_results();
-//var_dump($success);
-//var_dump($error);
-
-//var_dump($posts->get_posts());
-//exit;
-
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
