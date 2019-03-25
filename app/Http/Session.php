@@ -15,10 +15,9 @@ class Session
         }
 
         // tokenがなければ生成
-        $this->regenerate_token();
-
-        // tokenの取得
-        $this->token();
+        if (!$this->token()) {
+            $this->regenerate_token();
+        }
 
 ;    }
 
@@ -87,7 +86,7 @@ class Session
      */
     public function regenerate_token(): void
     {
-        $this->token() ?? $this->set('token', bin2hex(openssl_random_pseudo_bytes(16)));
+        $this->set('token', bin2hex(openssl_random_pseudo_bytes(16)));
     }
 
     /**

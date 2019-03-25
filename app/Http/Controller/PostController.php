@@ -19,7 +19,6 @@ class PostController
     public function __construct(Session $session)
     {
         $this->session = $session;
-        $this->session->regenerate_token();
         //var_dump($_SESSION['token']);
         //exit;
     }
@@ -33,6 +32,7 @@ class PostController
     {
         [$name, $comment] = $this->get_name_comment();
         [$success, $error] = $this->get_results();
+        $token = $this->session->token();
         $posts = $this->get_posts();
         include __DIR__ . '/../../../resources/views/index.php';
     }

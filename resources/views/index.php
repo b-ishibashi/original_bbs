@@ -19,7 +19,7 @@
             <form action="" method="post" id="my_form">
                 名前: <input type="text" name="name" value="<?= h($name) ?>" id="my_name">
                 本文: <input type="text" name="comment" value="<?= h($comment) ?>" id="my_comment">
-                <input type="hidden" name="token" value="<?= h($_SESSION['token']) ?>">
+                <input type="hidden" name="token" value="<?= h($token) ?>">
                 <button type="submit" id="btn">投稿</button>
             </form>
         </div>

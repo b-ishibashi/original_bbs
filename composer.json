@@ -9,5 +9,11 @@
             "vendor/bin/php-cs-fixer fix resources/views"
         ],
         "serve": "php -S localhost:8080 -t public"
-    }
+    },
+    "autoload": {
+        "files": ["app/functions.php"],
+        "psr-4": {
+            "App\\Http\\Controller\\",
+        }
+    },
 }
