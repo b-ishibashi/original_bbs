@@ -19,7 +19,8 @@ class PostController
     public function __construct(Session $session)
     {
         $this->session = $session;
-        $this->create_token();
+        //var_dump($_SESSION['token']);
+        //exit;
     }
 
     /**
@@ -31,6 +32,7 @@ class PostController
     {
         [$name, $comment] = $this->get_name_comment();
         [$success, $error] = $this->get_results();
+        $token = $this->session->token();
         $posts = $this->get_posts();
         include __DIR__ . '/../../../resources/views/index.php';
     }
@@ -50,7 +52,7 @@ class PostController
 
             $this->validate_comment($request);
 
-            $this->validate_token($request);
+            $this->session->validate_token($request);
 
             (new Post())->insert_post();
 
@@ -64,29 +66,6 @@ class PostController
         //redirect
         header('Location: /');
         exit;
-    }
-
-    private function create_token()
-    {
-        if ($this->session->get('token') === null) {
-            $this->session->set('token', bin2hex(openssl_random_pseudo_bytes(16)));
-        }
-    }
-
-    private function validate_token($request)
-    {
-        // 期待する値
-        $expected = $this->session->get('token');
-        // 実際に送られてきた値
-        $actual = $request['token'] ?? null;
-
-        // 以下のいずれかの場合にエラーとする
-        // ・期待する値が null である（トークンは普通設定されているのでバグではない限りあり得ない）
-        // ・送られてきた値が null もしくは未定義である
-        // ・期待する値と送られてきた値が一致しない
-        if ($expected === null || $actual === null || $expected !== $actual) {
-            throw new \Exception('validate token!');
-        }
     }
 
     private function memoize_inputs($request)
