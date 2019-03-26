@@ -1,12 +1,9 @@
 <?php
 
 use App\Http\Controllers\PostController;
-use App\Http\Session\Session;
+use App\Http\Session;
 
-require_once __DIR__ . '/../app/Models/Post.php';
-require_once __DIR__ . '/../app/functions.php';
-require_once __DIR__ . '/../app/Http/Session.php';
-require_once __DIR__ . '/../app/Http/Controller/PostController.php';
+require_once __DIR__ . "/../vendor/autoload.php";
 
 $controller = new PostController(new Session());
 

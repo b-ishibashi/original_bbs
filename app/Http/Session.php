@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Session;
+namespace App\Http;
 
 class Session
 {
@@ -19,7 +19,8 @@ class Session
             $this->regenerate_token();
         }
 
-;    }
+;
+    }
 
     /**
      * 値の保存
@@ -110,5 +111,4 @@ class Session
             throw new \Exception('invalidate token!');
         }
     }
-
 }
