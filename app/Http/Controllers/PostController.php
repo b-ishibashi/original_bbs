@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Http\Session\Session;
+
+use App\Http\Session;
 use App\Models\Post;
 
 class PostController
